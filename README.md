@@ -1,5 +1,7 @@
 # Devise::TokenAuthenticatable
 
+**Note that this gem is not ready for usage, yet!**
+
 TODO: Write a gem description
 
 ## Installation
