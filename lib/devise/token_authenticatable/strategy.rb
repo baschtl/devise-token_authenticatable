@@ -2,6 +2,14 @@ require 'devise/strategies/base'
 
 module Devise
   module Strategies
+    #
+    # The +PlainTokenAuthenticatable+ strategy was extracted from Devise 3.1.0. Its purpose is
+    # to provide the deprecated functionality of the +TokenAuthenticatable+ strategy. The
+    # following description was adapted accordingly.
+    #
+    # See: https://github.com/plataformatec/devise/blob/v3.1/lib/devise/strategies/token_authenticatable.rb
+    #
+    #
     # Strategy for signing in a user, based on a authenticatable token. This works for both params
     # and http. For the former, all you need to do is to pass the params in the URL:
     #
@@ -14,6 +22,14 @@ module Devise
     # You may also pass the token using the Token authentication mechanism provided
     # by Rails: http://api.rubyonrails.org/classes/ActionController/HttpAuthentication/Token.html
     # The token options are stored in request.env['devise.token_options']
+    #
+    #
+    # Changes regarding the original +TokenAuthenticatable+ implementation:
+    #
+    # The private method +remember_me?+ in +TokenAuthenticatable+ returns +false+.
+    # For +PlainTokenAuthenticatable+ this method was removed. This results in the
+    # usage of the default implementation in +Authenticatable+.
+    #
     class PlainTokenAuthenticatable < Authenticatable
       def store?
         super && !mapping.to.skip_session_storage.include?(:token_auth)
@@ -38,11 +54,6 @@ module Devise
       # Token Authenticatable can be authenticated with params in any controller and any verb.
       def valid_params_request?
         true
-      end
-
-      # Do not use remember_me behavior with token.
-      def remember_me?
-        false
       end
 
       # Check if the model accepts this strategy as token authenticatable.
@@ -88,4 +99,4 @@ module Devise
   end
 end
 
-#Warden::Strategies.add(:plain_token_authenticatable, Devise::TokenAuthenticatable::Strategies::PlainTokenAuthenticatable)
+Warden::Strategies.add(:plain_token_authenticatable, Devise::Strategies::PlainTokenAuthenticatable)

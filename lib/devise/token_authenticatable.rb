@@ -1,9 +1,13 @@
-require "devise/token_authenticatable/version"
+require "devise/token_authenticatable/strategy"
 
 module Devise
-  module TokenAuthenticatable
+  module PlainTokenAuthenticatable
 
   end
 end
 
-Devise::add_module(:plain_token_authenticatable, model: 'devise/token_authenticatable/model', strategy: true)
+# Register PlainTokenAuthenticatable module in Devise.
+Devise::add_module  :plain_token_authenticatable,
+                    model: 'devise/token_authenticatable/model',
+                    strategy: true,
+                    no_input: true
