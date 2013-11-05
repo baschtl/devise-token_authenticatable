@@ -5,7 +5,8 @@ require 'devise/token_authenticatable/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "devise-token_authenticatable"
-  spec.version       = Devise::TokenAuthenticatable::VERSION
+  spec.version       = Devise::TokenAuthenticatable::VERSION.dup
+  spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Sebastian Oelke"]
   spec.email         = ["soelke@babbel.com"]
   spec.description   = %q{TODO: Write a gem description}
@@ -21,7 +22,12 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "devise", "~> 3.1.0"
 
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "bundler", "~> 1.3"
+  spec.add_development_dependency "activerecord",       ">= 3.2"
+  spec.add_development_dependency "actionmailer",       ">= 3.2"
+  spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "factory_girl_rails"
+  spec.add_development_dependency "timecop"
+  spec.add_development_dependency "sqlite3",            "~> 1.3"
+  spec.add_development_dependency "bundler",            "~> 1.3"
   spec.add_development_dependency "rake"
 end
