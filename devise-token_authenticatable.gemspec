@@ -20,11 +20,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
 
-  spec.add_dependency "devise", "~> 3.1.0"
+  spec.add_dependency "devise", "~> 3.2.0"
 
   spec.add_development_dependency "activerecord",       ">= 3.2"
   spec.add_development_dependency "actionmailer",       ">= 3.2"
   spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "pry"
   spec.add_development_dependency "factory_girl_rails"
   spec.add_development_dependency "timecop"
   spec.add_development_dependency "sqlite3",            "~> 1.3"
