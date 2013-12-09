@@ -5,7 +5,7 @@
 ActiveRecord::Migration.verbose = false
 
 module Devise
-  module PlainTokenAuthenticatable
+  module TokenAuthenticatable
     class RailsApp < Rails::Application
       config.root                               = File.dirname(__FILE__) + "/rails_app"
       config.active_support.deprecation         = :log
@@ -16,4 +16,4 @@ module Devise
   end
 end
 
-Devise::PlainTokenAuthenticatable::RailsApp.initialize!
+Devise::TokenAuthenticatable::RailsApp.initialize!

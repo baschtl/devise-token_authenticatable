@@ -1,5 +1,3 @@
-require 'devise/strategies/token_authenticatable'
-
 module Devise
   module Models
     # The TokenAuthenticatable module is responsible for generating an authentication token and
@@ -36,7 +34,7 @@ module Devise
     #
     #   * +token_authentication_key+: Defines name of the authentication token params key. E.g. /users/sign_in?some_key=...
     #
-    module PlainTokenAuthenticatable
+    module TokenAuthenticatable
       extend ActiveSupport::Concern
 
       def self.required_fields(klass)
@@ -74,7 +72,7 @@ module Devise
 
       module ClassMethods
         def find_for_token_authentication(conditions)
-          find_for_authentication(:authentication_token => conditions[token_authentication_key])
+          find_for_authentication(:authentication_token => conditions[Devise::TokenAuthenticatable.token_authentication_key])
         end
 
         # Generate a token checking if one does not already exist in the database.

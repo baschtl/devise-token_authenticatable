@@ -9,7 +9,7 @@
 def sign_in_as_new_user_with_token(options = {})
   user = options.delete(:user) || create(:user, :with_authentication_token)
 
-  options[:auth_token_key] ||= Devise.token_authentication_key
+  options[:auth_token_key] ||= Devise::TokenAuthenticatable.token_authentication_key
   options[:auth_token]     ||= user.authentication_token
 
   if options[:http_auth]

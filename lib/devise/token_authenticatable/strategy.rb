@@ -3,7 +3,7 @@ require 'devise/strategies/base'
 module Devise
   module Strategies
     #
-    # The +PlainTokenAuthenticatable+ strategy was extracted from Devise 3.1.0. Its purpose is
+    # The +TokenAuthenticatable+ strategy was extracted from Devise 3.1.0. Its purpose is
     # to provide the deprecated functionality of the +TokenAuthenticatable+ strategy. The
     # following description was adapted accordingly.
     #
@@ -27,10 +27,10 @@ module Devise
     # Changes regarding the original +TokenAuthenticatable+ implementation:
     #
     # The private method +remember_me?+ in +TokenAuthenticatable+ returns +false+.
-    # For +PlainTokenAuthenticatable+ this method was removed. This results in the
+    # For +TokenAuthenticatable+ this method was removed. This results in the
     # usage of the default implementation in +Authenticatable+.
     #
-    class PlainTokenAuthenticatable < Authenticatable
+    class TokenAuthenticatable < Authenticatable
       def store?
         super && !mapping.to.skip_session_storage.include?(:token_auth)
       end
@@ -93,10 +93,10 @@ module Devise
 
       # Overwrite authentication keys to use token_authentication_key.
       def authentication_keys
-        @authentication_keys ||= [mapping.to.token_authentication_key]
+        @authentication_keys ||= [Devise::TokenAuthenticatable.token_authentication_key]
       end
     end
   end
 end
 
-Warden::Strategies.add(:plain_token_authenticatable, Devise::Strategies::PlainTokenAuthenticatable)
+Warden::Strategies.add(:token_authenticatable, Devise::Strategies::TokenAuthenticatable)

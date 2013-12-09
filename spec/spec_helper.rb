@@ -6,6 +6,7 @@ require 'devise/token_authenticatable'
 require 'rails/all'
 require 'rspec/rails'
 require 'timecop'
+require 'pry'
 
 # Required spec helper files
 require 'support/rails_app'
