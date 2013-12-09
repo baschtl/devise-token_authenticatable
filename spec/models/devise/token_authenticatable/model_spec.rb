@@ -66,7 +66,7 @@ shared_examples "plain token authenticatable" do
     describe "#required_fields" do
 
       it "should contain the fields that Devise uses" do
-        expect(Devise::Models::PlainTokenAuthenticatable.required_fields(described_class)).to eq([
+        expect(Devise::Models::TokenAuthenticatable.required_fields(described_class)).to eq([
           :authentication_token
         ])
       end
