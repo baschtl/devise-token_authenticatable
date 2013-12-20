@@ -8,9 +8,11 @@ Gem::Specification.new do |spec|
   spec.version       = Devise::TokenAuthenticatable::VERSION.dup
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Sebastian Oelke"]
-  spec.email         = ["soelke@babbel.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.email         = ["dev@sohleeatsworld.de"]
+  spec.description   = %q{This gem provides the extracted Token Authenticatable module of devise.
+                          It enables the user to sign in via an authentication token. This token
+                          can be given via a query string or HTTP Basic Authentication.}
+  spec.summary       = %q{Provides authentication based on an authentication token for devise 3.2 and up.}
   spec.homepage      = "https://github.com/baschtl/devise-token_authenticatable"
   spec.license       = "MIT"
 
