@@ -23,7 +23,7 @@ Or install it yourself as:
 Add `:token_authenticatable` to your devise model:
 
     class User < ActiveRecord::Base
-      devise  :database_authenticatable, :token_authenticatable
+      devise :database_authenticatable, :token_authenticatable
     end
 
 The authentication key name used by this module defaults to `auth_token`. Use the following configuration to alter the name:
