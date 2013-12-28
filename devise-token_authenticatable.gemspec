@@ -4,8 +4,6 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'devise/token_authenticatable/version'
 
 Gem::Specification.new do |spec|
-  puts "TYPE: #{RUBY_ENGINE}"
-  
   spec.name          = "devise-token_authenticatable"
   spec.version       = Devise::TokenAuthenticatable::VERSION.dup
   spec.platform      = Gem::Platform::RUBY
@@ -36,8 +34,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
 
   # Fix database connection with sqlite3 and jruby
-  if RUBY_ENGINE == 'ruby'
-    spec.add_development_dependency "sqlite3",            "~> 1.3"
+  if    RUBY_ENGINE == 'ruby'
+    spec.add_development_dependency "sqlite3",          "~> 1.3"
   elsif RUBY_ENGINE == 'jruby'
     spec.add_development_dependency "activerecord-jdbcsqlite3-adapter"
   end
