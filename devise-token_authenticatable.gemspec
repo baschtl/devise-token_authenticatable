@@ -30,9 +30,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "factory_girl_rails"
   spec.add_development_dependency "timecop"
-  spec.add_development_dependency "sqlite3",            "~> 1.3"
   spec.add_development_dependency "bundler",            "~> 1.3"
   spec.add_development_dependency "rake"
 
-  spec.add_development_dependency "activerecord-jdbcsqlite3-adapter" if RUBY_ENGINE == 'jruby'
+  # Fix database connection with sqlite3 and jruby
+  if RUBY_ENGINE == 'ruby'
+    spec.add_development_dependency "sqlite3",            "~> 1.3"
+  elsif RUBY_ENGINE == 'jruby'
+    spec.add_development_dependency "activerecord-jdbcsqlite3-adapter"
+  end
 end
