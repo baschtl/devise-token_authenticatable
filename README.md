@@ -4,6 +4,8 @@
 
 This gem provides the extracted Token Authenticatable module of devise. It includes the functionality that was also in [version 3.1.2](https://github.com/plataformatec/devise/tree/v3.1.2) of devise. With the inclusion of this module a user is able to sign in via an authentication token. This token can be given via a query string or HTTP Basic Authentication.
 
+Use this gem as a starting point for your own token authentication mechanism for devise. Furthermore, if you need token authentication in connection with newer devise releases this gem might be an appropriate solution, too.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -26,7 +28,7 @@ Add `:token_authenticatable` to your devise model:
       devise :database_authenticatable, :token_authenticatable
     end
 
-The authentication key name used by this module defaults to `auth_token`. Use the following configuration to alter the name:
+The authentication key name used by this module defaults to `auth_token`. Use the following configuration (e.g., in a Rails initializer) to alter the name:
 
     Devise::TokenAuthenticatable.setup do |config|
       config.token_authentication_key = :other_key_name
