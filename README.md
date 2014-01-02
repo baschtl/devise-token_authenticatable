@@ -2,7 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/devise-token_authenticatable.png)](http://badge.fury.io/rb/devise-token_authenticatable) [![Build Status](https://travis-ci.org/baschtl/devise-token_authenticatable.png?branch=master)](https://travis-ci.org/baschtl/devise-token_authenticatable) [![Code Climate](https://codeclimate.com/github/baschtl/devise-token_authenticatable.png)](https://codeclimate.com/github/baschtl/devise-token_authenticatable)
 
-This gem provides the extracted Token Authenticatable module of devise. It includes the functionality that was also in [version 3.1.2](https://github.com/plataformatec/devise/tree/v3.1.2) of devise. With the inclusion of this module a user is able to sign in via an authentication token. This token can be given via a query string or HTTP Basic Authentication.
+This gem provides the extracted Token Authenticatable module of devise. It includes the functionality that was also in [version 3.1.2](https://github.com/plataformatec/devise/tree/v3.1.2) of devise. With the inclusion of this module a user is able to sign in via an authentication token. This token can be given via a query string or HTTP Basic Authentication. This gem requires devise 3.2.0 or newer.
 
 Use this gem as a starting point for your own token authentication mechanism for devise. Furthermore, if you need token authentication in connection with newer devise releases this gem might be an appropriate solution, too.
 
