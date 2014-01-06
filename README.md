@@ -34,6 +34,10 @@ The authentication key name used by this module defaults to `auth_token`. Use th
       config.token_authentication_key = :other_key_name
     end
 
+## Documentation
+
+For your convenience there is also a [source code documentation](http://rubydoc.info/github/baschtl/devise-token_authenticatable/master/frames).
+
 ## Contributing
 
 1. Fork it.
