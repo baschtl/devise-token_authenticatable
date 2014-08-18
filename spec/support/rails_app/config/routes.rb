@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   # Users scope
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  devise_for :users
 
   as :user do
     get "/as/sign_in", :to => "devise/sessions#new"
