@@ -9,7 +9,7 @@ require 'timecop'
 require 'pry'
 
 # Required spec helper files
-require 'support/rails_app'
+require 'support/rails_app/config/environment'
 require 'support/helpers'
 require 'support/integration'
 require 'support/session_helper'
@@ -18,10 +18,12 @@ require 'support/session_helper'
 # as it sets the right application root path
 require 'factory_girl_rails'
 
+# Do not show migration output
+ActiveRecord::Migration.verbose = false
+
 # RSpec configuration
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values  = true
   config.use_transactional_fixtures                       = true
   config.run_all_when_everything_filtered                 = true
 
@@ -34,6 +36,8 @@ RSpec.configure do |config|
   #config.order = 'random'
 
   config.include FactoryGirl::Syntax::Methods
+
+  config.infer_spec_type_from_file_location!
 
   config.before(:suite) do
     # Do initial migration
