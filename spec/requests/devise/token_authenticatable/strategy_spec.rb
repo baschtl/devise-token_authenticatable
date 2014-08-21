@@ -7,7 +7,7 @@ describe Devise::Strategies::TokenAuthenticatable do
     context "through params" do
 
       it "should be a success" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           sign_in_as_new_user_with_token
 
           expect(response).to be_success
@@ -15,7 +15,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       it "should set the auth_token parameter" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           user = sign_in_as_new_user_with_token
 
           expect(@request.fullpath).to eq("/users?secret_token=#{user.authentication_token}")
@@ -23,7 +23,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       it "should authenticate user" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           sign_in_as_new_user_with_token
 
           expect(warden).to be_authenticated(:user)
@@ -34,7 +34,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         let(:user) { create(:user, :with_authentication_token) }
 
         it 'should be a success' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             post exhibit_user_path(user), Devise::TokenAuthenticatable.token_authentication_key => user.authentication_token, user: { some: "data" }
 
             expect(response).to be_success
@@ -42,7 +42,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it 'should return proper data' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             post exhibit_user_path(user), Devise::TokenAuthenticatable.token_authentication_key => user.authentication_token, user: { some: "data" }
 
             expect(response.body).to eq('User is authenticated')
@@ -50,7 +50,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it 'should authenticate user' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             post exhibit_user_path(user), Devise::TokenAuthenticatable.token_authentication_key => user.authentication_token, user: { some: "data" }
 
             expect(warden).to be_authenticated(:user)
@@ -61,8 +61,8 @@ describe Devise::Strategies::TokenAuthenticatable do
       context "when request is stateless" do
 
         it 'should authenticate the user with use of authentication token' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :skip_session_storage => [:token_auth] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, skip_session_storage: [:token_auth] do
               sign_in_as_new_user_with_token
               expect(warden).to be_authenticated(:user)
             end
@@ -70,8 +70,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it 'should redirect to the sign in page' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :skip_session_storage => [:token_auth] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, skip_session_storage: [:token_auth] do
               sign_in_as_new_user_with_token
 
               # Try to access a resource that requires authentication
@@ -82,8 +82,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it 'should not store the session' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :skip_session_storage => [:token_auth] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, skip_session_storage: [:token_auth] do
               sign_in_as_new_user_with_token
 
               # Try to access a resource that requires authentication
@@ -100,8 +100,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on sign in" do
 
           it 'should authenticate the user' do
-            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-              swap Devise, :skip_session_storage => [:token_auth], timeout_in: (0.1).second do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+              swap Devise, skip_session_storage: [:token_auth], timeout_in: (0.1).second do
                 sign_in_as_new_user_with_token
                 expect(warden).to be_authenticated(:user)
               end
@@ -113,8 +113,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on delayed access" do
 
           it 'should authenticate the user' do
-            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-              swap Devise, :skip_session_storage => [:token_auth], timeout_in: (0.1).second do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+              swap Devise, skip_session_storage: [:token_auth], timeout_in: (0.1).second do
                 user = sign_in_as_new_user_with_token
 
                 # Expiring does not work because we are setting the session value when accessing the resource
@@ -137,7 +137,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on sign in" do
 
           it 'should authenticate the user' do
-            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
               swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
                 sign_in_as_new_user_with_token
                 expect(warden).to be_authenticated(:user)
@@ -150,7 +150,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on re-sign in" do
 
           it 'should not authenticate the user' do
-            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
               swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
                 token = user.authentication_token
@@ -162,7 +162,7 @@ describe Devise::Strategies::TokenAuthenticatable do
           end
 
           it 'should reset the authentication token' do
-            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
               swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
                 token = user.authentication_token
@@ -181,8 +181,8 @@ describe Devise::Strategies::TokenAuthenticatable do
       context "when not configured" do
 
         it "should redirect to sign in page" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :params_authenticatable => [:database] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, params_authenticatable: [:database] do
               sign_in_as_new_user_with_token
 
               expect(response).to redirect_to new_user_session_path
@@ -191,8 +191,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should not authenticate user" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :params_authenticatable => [:database] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, params_authenticatable: [:database] do
               sign_in_as_new_user_with_token
 
               expect(warden).to_not be_authenticated(:user)
@@ -205,7 +205,7 @@ describe Devise::Strategies::TokenAuthenticatable do
     context "through http" do
 
       it "should be a success" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(http_auth: true)
 
@@ -215,7 +215,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       it "should authenticate user" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(http_auth: true)
 
@@ -227,8 +227,8 @@ describe Devise::Strategies::TokenAuthenticatable do
       context "when not configured" do
 
         it "should be an unauthorized" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:database] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:database] do
               sign_in_as_new_user_with_token(http_auth: true)
 
               expect(response.status).to eq(401)
@@ -237,8 +237,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should not authenticate user" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:database] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:database] do
               sign_in_as_new_user_with_token(http_auth: true)
 
               expect(warden).to_not be_authenticated(:user)
@@ -251,7 +251,7 @@ describe Devise::Strategies::TokenAuthenticatable do
     context "through http header" do
 
       it "should redirect to root path" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(token_auth: true)
 
@@ -261,7 +261,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       it "should not set any token options for Devise" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(token_auth: true)
 
@@ -271,7 +271,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       it "should authenticate user" do
-        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+        swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(token_auth: true)
 
@@ -284,8 +284,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         let(:signature) { "**TESTSIGNATURE**" }
 
         it "should redirect to root path" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:token_options] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:token_options] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(response).to be_success
@@ -294,8 +294,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should set the signature option" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:token_options] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:token_options] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(request.env['devise.token_options'][:signature]).to eq(signature)
@@ -304,8 +304,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should set the nonce option" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:token_options] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:token_options] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(request.env['devise.token_options'][:nonce]).to eq('def')
@@ -314,8 +314,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should authenticate user" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :http_authenticatable => [:token_options] do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: [:token_options] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(warden).to be_authenticated(:user)
@@ -327,7 +327,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       context "with denied token authorization" do
 
         it "should be an unauthorized" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, http_authenticatable: false do
               sign_in_as_new_user_with_token(token_auth: true)
 
@@ -337,7 +337,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "should not authenticate user" do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, http_authenticatable: false do
               sign_in_as_new_user_with_token(token_auth: true)
 
@@ -354,23 +354,23 @@ describe Devise::Strategies::TokenAuthenticatable do
   context "with improper authentication token key" do
 
     it "should redirect to the sign in page" do
-      swap Devise::TokenAuthenticatable, :token_authentication_key => :donald_duck_token do
-        sign_in_as_new_user_with_token(:auth_token_key => :secret_token)
+      swap Devise::TokenAuthenticatable, token_authentication_key: :donald_duck_token do
+        sign_in_as_new_user_with_token(auth_token_key: :secret_token)
 
         expect(response).to redirect_to new_user_session_path
       end
     end
 
     it "should not authenticate user" do
-      swap Devise::TokenAuthenticatable, :token_authentication_key => :donald_duck_token do
-        sign_in_as_new_user_with_token(:auth_token_key => :secret_token)
+      swap Devise::TokenAuthenticatable, token_authentication_key: :donald_duck_token do
+        sign_in_as_new_user_with_token(auth_token_key: :secret_token)
 
         expect(warden).to_not be_authenticated(:user)
       end
     end
 
     it "should not be subject to injection" do
-      swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+      swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
         user1 = create(:user, :with_authentication_token)
         user2 = create(:user, :with_authentication_token)
 
