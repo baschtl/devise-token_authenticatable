@@ -49,7 +49,7 @@ module Devise
       # Generate new authentication token and save the record.
       def reset_authentication_token!
         reset_authentication_token
-        save(:validate => false)
+        save(validate: false)
       end
 
       # Generate authentication token unless already exists.
@@ -72,14 +72,14 @@ module Devise
 
       module ClassMethods
         def find_for_token_authentication(conditions)
-          find_for_authentication(:authentication_token => conditions[Devise::TokenAuthenticatable.token_authentication_key])
+          find_for_authentication(authentication_token: conditions[Devise::TokenAuthenticatable.token_authentication_key])
         end
 
         # Generate a token checking if one does not already exist in the database.
         def authentication_token
           loop do
             token = Devise.friendly_token
-            break token unless to_adapter.find_first({ :authentication_token => token })
+            break token unless to_adapter.find_first({ authentication_token: token })
           end
         end
 
