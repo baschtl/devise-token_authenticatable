@@ -60,57 +60,122 @@ describe Devise::Strategies::TokenAuthenticatable do
 
       context "when request is stateless" do
 
-        it 'should not store the session' do
+        it 'should authenticate the user with use of authentication token' do
           swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
             swap Devise, :skip_session_storage => [:token_auth] do
               sign_in_as_new_user_with_token
               expect(warden).to be_authenticated(:user)
+            end
+          end
+        end
+
+        it 'should redirect to the sign in page' do
+          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+            swap Devise, :skip_session_storage => [:token_auth] do
+              sign_in_as_new_user_with_token
 
               # Try to access a resource that requires authentication
               get users_path
               expect(response).to redirect_to new_user_session_path
+            end
+          end
+        end
+
+        it 'should not store the session' do
+          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+            swap Devise, :skip_session_storage => [:token_auth] do
+              sign_in_as_new_user_with_token
+
+              # Try to access a resource that requires authentication
+              get users_path
               expect(warden).to_not be_authenticated(:user)
             end
           end
         end
+
       end
 
       context "when request is stateless and timeoutable" do
 
-        it 'should authenticate user' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, :skip_session_storage => [:token_auth], timeout_in: (0.1).second do
-              user = sign_in_as_new_user_with_token
-              expect(warden).to be_authenticated(:user)
+        context "on sign in" do
 
-              # Expiring does not work because we are setting the session value when accessing the resource
-              Timecop.travel(Time.now + (0.3).second)
-
-              sign_in_as_new_user_with_token(user: user)
-              expect(warden).to be_authenticated(:user)
-
-              Timecop.return
+          it 'should authenticate the user' do
+            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+              swap Devise, :skip_session_storage => [:token_auth], timeout_in: (0.1).second do
+                sign_in_as_new_user_with_token
+                expect(warden).to be_authenticated(:user)
+              end
             end
           end
+
         end
+
+        context "on delayed access" do
+
+          it 'should authenticate the user' do
+            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+              swap Devise, :skip_session_storage => [:token_auth], timeout_in: (0.1).second do
+                user = sign_in_as_new_user_with_token
+
+                # Expiring does not work because we are setting the session value when accessing the resource
+                Timecop.travel(Time.now + (0.3).second)
+
+                sign_in_as_new_user_with_token(user: user)
+                expect(warden).to be_authenticated(:user)
+
+                Timecop.return
+              end
+            end
+          end
+
+        end
+
       end
 
       context "when expire_auth_token_on_timeout is set to true, timeoutable is enabled and we have a timed out session" do
 
-        it 'should reset authentication token and not authenticate' do
-          swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
-            swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
-              user = sign_in_as_new_user_with_token
-              expect(warden).to be_authenticated(:user)
-              token = user.authentication_token
+        context "on sign in" do
 
-              sign_in_as_new_user_with_token(user: user)
-              expect(warden).to_not be_authenticated(:user)
-              user.reload
-              expect(token).to_not eq(user.authentication_token)
+          it 'should authenticate the user' do
+            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+                sign_in_as_new_user_with_token
+                expect(warden).to be_authenticated(:user)
+              end
             end
           end
+
         end
+
+        context "on re-sign in" do
+
+          it 'should not authenticate the user' do
+            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+                user  = sign_in_as_new_user_with_token
+                token = user.authentication_token
+
+                sign_in_as_new_user_with_token(user: user)
+                expect(warden).to_not be_authenticated(:user)
+              end
+            end
+          end
+
+          it 'should reset the authentication token' do
+            swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+                user  = sign_in_as_new_user_with_token
+                token = user.authentication_token
+
+                sign_in_as_new_user_with_token(user: user)
+                user.reload
+                expect(token).to_not eq(user.authentication_token)
+              end
+            end
+          end
+
+        end
+
       end
 
       context "when not configured" do
@@ -195,12 +260,21 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
       end
 
-      it "should authenticate user" do
+      it "should not set any token options for Devise" do
         swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(token_auth: true)
 
             expect(request.env['devise.token_options']).to eq({})
+          end
+        end
+      end
+
+      it "should authenticate user" do
+        swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
+          swap Devise, http_authenticatable: true do
+            sign_in_as_new_user_with_token(token_auth: true)
+
             expect(warden).to be_authenticated(:user)
           end
         end
@@ -271,7 +345,9 @@ describe Devise::Strategies::TokenAuthenticatable do
             end
           end
         end
+
       end
+
     end
   end
 
@@ -296,17 +372,13 @@ describe Devise::Strategies::TokenAuthenticatable do
     it "should not be subject to injection" do
       swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
         user1 = create(:user, :with_authentication_token)
-
-        # Clean up user cache
-        @user = nil
-
         user2 = create(:user, :with_authentication_token)
 
-        expect(user1).to_not eq(user2)
         get users_path(Devise::TokenAuthenticatable.token_authentication_key.to_s + '[$ne]' => user1.authentication_token)
         expect(warden).to_not be_authenticated(:user)
       end
     end
+
   end
 
   context "with improper authentication token value" do
