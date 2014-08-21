@@ -20,6 +20,10 @@ Or install it yourself as:
 
     $ gem install devise-token_authenticatable
 
+### Users of Devise earlier than 3.3.0
+
+Please, use version 0.1.0 of this gem. All later versions do not support Devise < 3.3.0.
+
 ## Usage
 
 Add `:token_authenticatable` to your devise model:
