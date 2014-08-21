@@ -22,15 +22,14 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
 
-  spec.add_dependency "devise", "~> 3.3.0"
+  spec.add_dependency "devise",                         "~> 3.3.0"
 
   spec.add_development_dependency "rails",              "~> 4.1.0"
-  spec.add_development_dependency "rspec-rails"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "factory_girl_rails"
-  spec.add_development_dependency "timecop"
+  spec.add_development_dependency "rspec-rails",        "~> 3.0.2"
+  spec.add_development_dependency "pry",                "~> 0.10.0"
+  spec.add_development_dependency "factory_girl_rails", "~> 4.4.0"
+  spec.add_development_dependency "timecop",            "~> 0.7.0"
   spec.add_development_dependency "bundler",            "~> 1.6"
-  spec.add_development_dependency "rake"
 
   # Fix database connection with sqlite3 and jruby
   if    RUBY_ENGINE == 'ruby'
