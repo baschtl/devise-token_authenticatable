@@ -10,7 +10,7 @@ describe Devise::Strategies::TokenAuthenticatable do
         swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
           sign_in_as_new_user_with_token
 
-          response.should be_success
+          expect(response).to be_success
         end
       end
 
@@ -37,7 +37,7 @@ describe Devise::Strategies::TokenAuthenticatable do
           swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
             post exhibit_user_path(user), Devise::TokenAuthenticatable.token_authentication_key => user.authentication_token, user: { some: "data" }
 
-            response.should be_success
+            expect(response).to be_success
           end
         end
 
@@ -45,7 +45,7 @@ describe Devise::Strategies::TokenAuthenticatable do
           swap Devise::TokenAuthenticatable, :token_authentication_key => :secret_token do
             post exhibit_user_path(user), Devise::TokenAuthenticatable.token_authentication_key => user.authentication_token, user: { some: "data" }
 
-            response.body.should eq('User is authenticated')
+            expect(response.body).to eq('User is authenticated')
           end
         end
 
@@ -68,7 +68,7 @@ describe Devise::Strategies::TokenAuthenticatable do
 
               # Try to access a resource that requires authentication
               get users_path
-              response.should redirect_to(new_user_session_path)
+              expect(response).to redirect_to new_user_session_path
               expect(warden).to_not be_authenticated(:user)
             end
           end
@@ -120,7 +120,7 @@ describe Devise::Strategies::TokenAuthenticatable do
             swap Devise, :params_authenticatable => [:database] do
               sign_in_as_new_user_with_token
 
-              response.should redirect_to new_user_session_path
+              expect(response).to redirect_to new_user_session_path
             end
           end
         end
@@ -144,7 +144,7 @@ describe Devise::Strategies::TokenAuthenticatable do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(http_auth: true)
 
-            response.should be_success
+            expect(response).to be_success
           end
         end
       end
@@ -166,7 +166,7 @@ describe Devise::Strategies::TokenAuthenticatable do
             swap Devise, :http_authenticatable => [:database] do
               sign_in_as_new_user_with_token(http_auth: true)
 
-              response.status.should eq(401)
+              expect(response.status).to eq(401)
             end
           end
         end
@@ -190,7 +190,7 @@ describe Devise::Strategies::TokenAuthenticatable do
           swap Devise, http_authenticatable: true do
             sign_in_as_new_user_with_token(token_auth: true)
 
-            response.should be_success
+            expect(response).to be_success
           end
         end
       end
@@ -214,7 +214,7 @@ describe Devise::Strategies::TokenAuthenticatable do
             swap Devise, :http_authenticatable => [:token_options] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
-              response.should be_success
+              expect(response).to be_success
             end
           end
         end
@@ -257,7 +257,7 @@ describe Devise::Strategies::TokenAuthenticatable do
             swap Devise, http_authenticatable: false do
               sign_in_as_new_user_with_token(token_auth: true)
 
-              response.status.should eq(401)
+              expect(response.status).to eq(401)
             end
           end
         end
@@ -281,7 +281,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       swap Devise::TokenAuthenticatable, :token_authentication_key => :donald_duck_token do
         sign_in_as_new_user_with_token(:auth_token_key => :secret_token)
 
-        response.should redirect_to(new_user_session_path)
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -316,7 +316,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       before { sign_in_as_new_user_with_token(auth_token: '*** INVALID TOKEN ***') }
 
       it "should redirect to the sign in page" do
-        response.should redirect_to(new_user_session_path)
+        expect(response).to redirect_to new_user_session_path
       end
 
       it "should not authenticate user" do
@@ -329,7 +329,7 @@ describe Devise::Strategies::TokenAuthenticatable do
       before { sign_in_as_new_user_with_token(token_auth: true, auth_token: '*** INVALID TOKEN ***') }
 
       it "should be an unauthorized" do
-        response.status.should eq(401)
+        expect(response.status).to eq(401)
       end
 
       it "does not authenticate with improper authentication token value in header" do
