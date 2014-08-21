@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 ##
-# If a model that is plain token authenticatable should be tested with
+# If a model that is token authenticatable should be tested with
 # this shared example the corresponding factory has to provide a trait
 # +:with_authentication_token+ that sets the attribute +authentication_token+.
 #
-# See spec/factories/account.rb for an example.
+# See spec/factories/user.rb for an example.
 #
-shared_examples "plain token authenticatable" do
+shared_examples "token authenticatable" do
 
   context "instance methods" do
 
@@ -75,5 +75,5 @@ shared_examples "plain token authenticatable" do
 end
 
 describe User do
-  it_behaves_like "plain token authenticatable"
+  it_behaves_like "token authenticatable"
 end
