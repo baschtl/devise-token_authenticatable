@@ -1,9 +1,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 # Required modules
+require 'rails/all'
 require 'devise'
 require 'devise/token_authenticatable'
-require 'rails/all'
 require 'rspec/rails'
 require 'timecop'
 require 'pry'
