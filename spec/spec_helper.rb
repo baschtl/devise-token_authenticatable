@@ -1,5 +1,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 
+require 'action_controller'
+
 # Required modules
 require 'devise'
 require 'devise/token_authenticatable'
