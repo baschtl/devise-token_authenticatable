@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe Devise::Strategies::TokenAuthenticatable do
+  
+  context "user sign in retrieves token" do
+    it "should get a token" do
+      user_params = { email: "test@test.com", password: 'test1234', confirmed_at: Time.now }
+      User.create!(user_params)
+      post '/as/sign_in',  {format: :json, user: { email: user_params[:email], password: user_params[:password] } }
+      expect(response).to be_success
+      expect(response.body).to include "authentication_token"
+    end
+  end
 
   context "with valid authentication token key and value" do
 
