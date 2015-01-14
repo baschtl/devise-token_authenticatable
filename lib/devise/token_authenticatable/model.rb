@@ -36,7 +36,13 @@ module Devise
     #
     module TokenAuthenticatable
       extend ActiveSupport::Concern
-
+      
+      Devise::Models.config(self, :should_reset_authentication_token, :should_ensure_authentication_token)
+      included do
+        before_save :reset_authentication_token if (should_reset_authentication_token ||= false)
+        before_save :ensure_authentication_token if (should_ensure_authentication_token ||= true)
+      end
+      
       def self.required_fields(klass)
         [:authentication_token]
       end
