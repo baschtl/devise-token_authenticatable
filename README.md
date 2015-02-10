@@ -1,6 +1,6 @@
 # Devise::TokenAuthenticatable
 
-[![Gem Version](https://badge.fury.io/rb/devise-token_authenticatable.png)](http://badge.fury.io/rb/devise-token_authenticatable) [![Build Status](https://travis-ci.org/baschtl/devise-token_authenticatable.png?branch=master)](https://travis-ci.org/baschtl/devise-token_authenticatable) [![Code Climate](https://codeclimate.com/github/baschtl/devise-token_authenticatable.png)](https://codeclimate.com/github/baschtl/devise-token_authenticatable)
+[![Tag](https://img.shields.io/github/tag/baschtl/devise-token_authenticatable.svg?style=flat-square)](https://github.com/baschtl/devise-token_authenticatable/releases) [![Build Status](https://img.shields.io/travis/baschtl/devise-token_authenticatable.svg?style=flat-square)](https://travis-ci.org/baschtl/devise-token_authenticatable) [![Code Climate](https://img.shields.io/codeclimate/github/baschtl/devise-token_authenticatable.svg?style=flat-square)](https://codeclimate.com/github/baschtl/devise-token_authenticatable)
 
 This gem provides the extracted Token Authenticatable module of devise. It includes the functionality that was also in [version 3.1.2](https://github.com/plataformatec/devise/tree/v3.1.2) of devise. With the inclusion of this module a user is able to sign in via an authentication token. This token can be given via a query string or HTTP Basic Authentication. See the hint below to understand which version of this gem supports which version of devise.
 
