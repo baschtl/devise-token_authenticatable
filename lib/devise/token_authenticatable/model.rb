@@ -4,14 +4,7 @@ module Devise
     # validating the authenticity of the same while signing in.
     #
     # This module only provides a few helpers to help you manage the token, but it is up to you
-    # to choose how to use it. For example, if you want to have a new token every time the user
-    # saves his account, you can do the following:
-    #
-    #   before_save :reset_authentication_token
-    #
-    # On the other hand, if you want to generate token unless one exists, you should use instead:
-    #
-    #   before_save :ensure_authentication_token
+    # to choose how to use it.
     #
     # If you want to delete the token after it is used, you can do so in the
     # after_token_authentication callback.
@@ -27,14 +20,6 @@ module Devise
     #   def skip_trackable
     #     request.env['devise.skip_trackable'] = true
     #   end
-    #
-    # == Options
-    #
-    # TODO: Adapt comment as the option is now a gem configuration.
-    #
-    # +TokenAuthenticatable+ adds the following options to devise_for:
-    #
-    #   * +token_authentication_key+: Defines name of the authentication token params key. E.g. /users/sign_in?some_key=...
     #
     module TokenAuthenticatable
       extend ActiveSupport::Concern
