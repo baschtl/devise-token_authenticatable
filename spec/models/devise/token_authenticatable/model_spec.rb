@@ -38,6 +38,7 @@ shared_examples "token authenticatable" do
         end
       end
     end
+
   end
 
   context "class methods" do
@@ -70,8 +71,10 @@ shared_examples "token authenticatable" do
           :authentication_token
         ])
       end
+
     end
   end
+  
 end
 
 describe User do
