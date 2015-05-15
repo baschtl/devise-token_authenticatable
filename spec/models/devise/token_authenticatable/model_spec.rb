@@ -38,6 +38,7 @@ shared_examples "token authenticatable" do
         end
       end
     end
+
   end
 
   context "class methods" do
@@ -70,8 +71,81 @@ shared_examples "token authenticatable" do
           :authentication_token
         ])
       end
+
     end
+
   end
+
+  context "before_save" do
+
+    let(:entity) { create(described_class.name.underscore.to_sym, :with_authentication_token) }
+
+    context "when the authentication token should be reset" do
+
+      before :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_reset_authentication_token = true
+        end
+      end
+
+      after :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_reset_authentication_token = false
+        end
+      end
+
+      it "resets the authentication token" do
+        expect(entity).to receive(:reset_authentication_token).once
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
+    context "when the authentication token should not be reset" do
+
+      it "does not reset the authentication token" do
+        expect(entity).to_not receive(:reset_authentication_token)
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
+    context "when the authentication token should be ensured" do
+
+      before :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_ensure_authentication_token = true
+        end
+      end
+
+      after :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_ensure_authentication_token = false
+        end
+      end
+
+      it "sets the authentication token" do
+        expect(entity).to receive(:ensure_authentication_token).once
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
+    context "when the authentication token should not be ensured" do
+
+      it "does not set the authentication token" do
+        expect(entity).to_not receive(:ensure_authentication_token)
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
+  end
+
 end
 
 describe User do
