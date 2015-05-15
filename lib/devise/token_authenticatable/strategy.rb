@@ -23,13 +23,6 @@ module Devise
     # by Rails: http://api.rubyonrails.org/classes/ActionController/HttpAuthentication/Token.html
     # The token options are stored in request.env['devise.token_options']
     #
-    #
-    # Changes regarding the original +TokenAuthenticatable+ implementation:
-    #
-    # The private method +remember_me?+ in +TokenAuthenticatable+ returns +false+.
-    # For +TokenAuthenticatable+ this method was removed. This results in the
-    # usage of the default implementation in +Authenticatable+.
-    #
     class TokenAuthenticatable < Authenticatable
       def store?
         super && !mapping.to.skip_session_storage.include?(:token_auth)

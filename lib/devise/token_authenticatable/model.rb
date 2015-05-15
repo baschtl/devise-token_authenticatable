@@ -1,6 +1,6 @@
 module Devise
   module Models
-    # The TokenAuthenticatable module is responsible for generating an authentication token and
+    # The +TokenAuthenticatable+ module is responsible for generating an authentication token and
     # validating the authenticity of the same while signing in.
     #
     # This module only provides a few helpers to help you manage the token, but it is up to you
@@ -30,7 +30,9 @@ module Devise
     #
     # == Options
     #
-    # TokenAuthenticatable adds the following options to devise_for:
+    # TODO: Adapt comment as the option is now a gem configuration.
+    #
+    # +TokenAuthenticatable+ adds the following options to devise_for:
     #
     #   * +token_authentication_key+: Defines name of the authentication token params key. E.g. /users/sign_in?some_key=...
     #
