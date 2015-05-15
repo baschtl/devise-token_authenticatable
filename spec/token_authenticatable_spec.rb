@@ -26,4 +26,16 @@ describe Devise::TokenAuthenticatable do
     end
   end
 
+  context "configuring the should_ensure_authentication_token" do
+    let(:should_ensure) { true }
+
+    it "should set the configuration" do
+      expect {
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_ensure_authentication_token = should_ensure
+        end
+      }.to change { Devise::TokenAuthenticatable.should_ensure_authentication_token }.from(false).to(should_ensure)
+    end
+  end
+
 end

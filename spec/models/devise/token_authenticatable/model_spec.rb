@@ -112,6 +112,38 @@ shared_examples "token authenticatable" do
 
     end
 
+    context "when the authentication token should be ensured" do
+
+      before :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_ensure_authentication_token = true
+        end
+      end
+
+      after :each do
+        Devise::TokenAuthenticatable.setup do |config|
+          config.should_ensure_authentication_token = false
+        end
+      end
+
+      it "sets the authentication token" do
+        expect(entity).to receive(:ensure_authentication_token).once
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
+    context "when the authentication token should not be ensured" do
+
+      it "does not set the authentication token" do
+        expect(entity).to_not receive(:ensure_authentication_token)
+
+        entity.update_attributes(created_at: Time.now)
+      end
+
+    end
+
   end
 
 end

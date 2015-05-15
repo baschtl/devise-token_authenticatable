@@ -41,6 +41,7 @@ module Devise
 
       included do
         before_save :reset_authentication_token_before_save
+        before_save :ensure_authentication_token_before_save
       end
 
       module ClassMethods
@@ -58,7 +59,7 @@ module Devise
         end
 
         Devise::Models.config(self, :expire_auth_token_on_timeout)
-        
+
       end
 
       def self.required_fields(klass)
@@ -98,6 +99,10 @@ module Devise
 
         def reset_authentication_token_before_save
           reset_authentication_token if Devise::TokenAuthenticatable.should_reset_authentication_token
+        end
+
+        def ensure_authentication_token_before_save
+          ensure_authentication_token if Devise::TokenAuthenticatable.should_ensure_authentication_token
         end
       
     end
