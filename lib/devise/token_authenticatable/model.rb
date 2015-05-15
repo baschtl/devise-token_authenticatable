@@ -39,6 +39,28 @@ module Devise
     module TokenAuthenticatable
       extend ActiveSupport::Concern
 
+      included do
+        before_save :reset_authentication_token_before_save
+      end
+
+      module ClassMethods
+
+        def find_for_token_authentication(conditions)
+          find_for_authentication(authentication_token: conditions[Devise::TokenAuthenticatable.token_authentication_key])
+        end
+
+        # Generate a token checking if one does not already exist in the database.
+        def authentication_token
+          loop do
+            token = Devise.friendly_token
+            break token unless to_adapter.find_first({ authentication_token: token })
+          end
+        end
+
+        Devise::Models.config(self, :expire_auth_token_on_timeout)
+        
+      end
+
       def self.required_fields(klass)
         [:authentication_token]
       end
@@ -72,21 +94,12 @@ module Devise
         self.class.expire_auth_token_on_timeout
       end
 
-      module ClassMethods
-        def find_for_token_authentication(conditions)
-          find_for_authentication(authentication_token: conditions[Devise::TokenAuthenticatable.token_authentication_key])
-        end
+      private
 
-        # Generate a token checking if one does not already exist in the database.
-        def authentication_token
-          loop do
-            token = Devise.friendly_token
-            break token unless to_adapter.find_first({ authentication_token: token })
-          end
+        def reset_authentication_token_before_save
+          reset_authentication_token if Devise::TokenAuthenticatable.should_reset_authentication_token
         end
-
-        Devise::Models.config(self, :expire_auth_token_on_timeout)
-      end
+      
     end
   end
 end
