@@ -51,6 +51,15 @@ shared_examples "token authenticatable" do
         expect(entity.authentication_token).to eq(authenticated_entity.authentication_token)
       end
 
+      it "should authenticate with all the options passed in, not just the auth_token" do
+        conditions = {facebook_token: entity.facebook_token, auth_token: entity.authentication_token}
+        expected_conditions = {facebook_token: entity.facebook_token, authentication_token: entity.authentication_token}
+
+        expect(described_class).to receive(:find_for_authentication).with(expected_conditions).and_call_original
+
+        described_class.find_for_token_authentication(conditions)
+      end
+
       it "should return nil when authenticating an invalid entity by authentication token" do
         authenticated_entity = described_class.find_for_token_authentication(auth_token: entity.authentication_token.reverse)
         expect(authenticated_entity).to be_nil

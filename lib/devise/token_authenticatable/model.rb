@@ -32,7 +32,12 @@ module Devise
       module ClassMethods
 
         def find_for_token_authentication(conditions)
-          find_for_authentication(authentication_token: conditions[Devise::TokenAuthenticatable.token_authentication_key])
+          auth_conditions = conditions.dup
+          authentication_token = auth_conditions.delete(Devise::TokenAuthenticatable.token_authentication_key)
+
+          find_for_authentication(
+            auth_conditions.merge(authentication_token: authentication_token)
+          )
         end
 
         # Generate a token checking if one does not already exist in the database.
@@ -89,7 +94,6 @@ module Devise
         def ensure_authentication_token_before_save
           ensure_authentication_token if Devise::TokenAuthenticatable.should_ensure_authentication_token
         end
-      
     end
   end
 end
