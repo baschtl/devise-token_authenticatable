@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:email)      { |n| "user#{n}@domain.com" }
     password              'some_password'
     password_confirmation 'some_password'
+    facebook_token        { SecureRandom.hex }
 
     ignore do
       confirm_account true
