@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   as :user do
     get "/as/sign_in", to: "devise/sessions#new"
+    post "/as/sign_in", to: "devise/sessions#create"
   end
 
   get "/sign_in", to: "devise/sessions#new"
