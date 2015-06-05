@@ -24,9 +24,10 @@ Or install it yourself as:
 
 *devise-token_authenticatable*  | *devise*
 -------------------------------:|---------
-0.1.0                           | ~> 3.2.0
-0.2.0                           | ~> 3.3.0
-0.3.x                           | >= 3.4.0, < 3.6.0
+`~> 0.1`                        | `~> 3.2.0`
+`~> 0.2`                        | `~> 3.3.0`
+`~> 0.3`                        | `~> 3.4.0`
+`~> 0.4`                        | `~> 3.5.0`
 
 ## Usage
 
@@ -48,7 +49,7 @@ This gem can be configured as shown in the following:
       # enable reset of the authentication token before the model is saved,
       # defaults to false
       config.should_reset_authentication_token = true
-    
+
       # enables the setting of the authentication token - if not already - before the model is saved,
       # defaults to false
       config.should_ensure_authentication_token = true
