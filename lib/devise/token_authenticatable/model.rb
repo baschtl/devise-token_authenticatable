@@ -22,7 +22,7 @@ module Devise
     #   end
     #
     module TokenAuthenticatable
-      extend ActiveSupport::Concern
+      extend ActiveSupport::Concern 
 
       included do
         before_save :reset_authentication_token_before_save
