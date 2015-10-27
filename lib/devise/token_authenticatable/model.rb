@@ -48,17 +48,18 @@ module Devise
           end
         end
 
-        Devise::Models.config(self, :expire_auth_token_on_timeout)
+        Devise::Models.config(self, :expire_auth_token_on_timeout, :token_expires_in)
 
       end
 
       def self.required_fields(klass)
-        [:authentication_token]
+        [:authentication_token,:authentication_token_created_at]
       end
 
       # Generate new authentication token (a.k.a. "single access token").
       def reset_authentication_token
         self.authentication_token = self.class.authentication_token
+        self.authentication_token_created_at = Time.now
       end
 
       # Generate new authentication token and save the record.
@@ -81,9 +82,14 @@ module Devise
       def after_token_authentication
       end
 
+      def token_expires_in
+        self.class.token_expires_in
+      end
+
       def expire_auth_token_on_timeout
         self.class.expire_auth_token_on_timeout
       end
+
 
       private
 

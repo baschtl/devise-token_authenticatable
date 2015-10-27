@@ -12,6 +12,19 @@ describe Devise::TokenAuthenticatable do
         end
       }.to change { Devise::TokenAuthenticatable.token_authentication_key }.from(:auth_token).to(new_key)
     end
+
+  end
+
+  context "configuring the token expiration" do
+    let(:expire_time) { 1.hour }
+
+    it "should set the configuration" do
+      expect {
+        Devise::TokenAuthenticatable.setup do |config|
+          config.token_expires_in = expire_time
+        end
+      }.to change { Devise::TokenAuthenticatable.token_authentication_key }.from(nil).to(expire_time)
+    end
   end
 
   context "configuring the should_reset_authentication_token" do
