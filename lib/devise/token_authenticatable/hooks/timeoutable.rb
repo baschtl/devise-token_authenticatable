@@ -12,8 +12,10 @@ Warden::Manager.after_set_user do |record, warden, options|
   scope = options[:scope]
   env   = warden.request.env
 
-  if record && record.respond_to?(:timedout?) && warden.authenticated?(scope) &&
-     options[:store] != false && !env['devise.skip_timeoutable']
+  if record && record.respond_to?(:timedout?) &&
+    warden.authenticated?(scope) &&
+    options[:store] != false     &&
+    !env['devise.skip_timeoutable']
 
     last_request_at = warden.session(scope)['last_request_at']
 
