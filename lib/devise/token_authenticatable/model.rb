@@ -1,3 +1,5 @@
+require 'devise/token_authenticatable/hooks/timeoutable'
+
 module Devise
   module Models
     # The +TokenAuthenticatable+ module is responsible for generating an authentication token and
@@ -48,8 +50,6 @@ module Devise
           end
         end
 
-        Devise::Models.config(self, :expire_auth_token_on_timeout)
-
       end
 
       def self.required_fields(klass)
@@ -82,7 +82,8 @@ module Devise
       end
 
       def expire_auth_token_on_timeout
-        self.class.expire_auth_token_on_timeout
+        # TODO: Add accessor to model
+        Devise::TokenAuthenticatable.expire_auth_token_on_timeout
       end
 
       private
