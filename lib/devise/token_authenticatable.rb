@@ -7,6 +7,9 @@ module Devise
     mattr_accessor :token_authentication_key
     @@token_authentication_key = :auth_token
 
+    mattr_accessor :token_expires_in
+    @@token_expires_in = nil
+
     # Defines if the authentication token is reset before the model is saved.
     mattr_accessor :should_reset_authentication_token
     @@should_reset_authentication_token = false

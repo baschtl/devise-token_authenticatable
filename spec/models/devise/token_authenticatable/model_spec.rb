@@ -16,6 +16,7 @@ shared_examples "token authenticatable" do
 
       it "should reset authentication token" do
         expect { entity.reset_authentication_token }.to change { entity.authentication_token }
+        expect { entity.reset_authentication_token }.to change { entity.authentication_token_created_at }
       end
     end
 
@@ -35,6 +36,9 @@ shared_examples "token authenticatable" do
         it "should create an authentication token" do
           entity.authentication_token = nil
           expect { entity.ensure_authentication_token }.to change { entity.authentication_token }
+          entity.authentication_token = nil
+          entity.authentication_token_created_at = nil
+          expect { entity.ensure_authentication_token }.to change { entity.authentication_token_created_at }
         end
       end
     end
@@ -77,7 +81,7 @@ shared_examples "token authenticatable" do
 
       it "should contain the fields that Devise uses" do
         expect(Devise::Models::TokenAuthenticatable.required_fields(described_class)).to eq([
-          :authentication_token
+          :authentication_token, :authentication_token_created_at
         ])
       end
 

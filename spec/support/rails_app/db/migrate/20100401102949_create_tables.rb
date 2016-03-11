@@ -35,6 +35,7 @@ class CreateTables < ActiveRecord::Migration
 
       ## Token authenticatable
       t.string :authentication_token
+      t.datetime :authentication_token_created_at, :null => true
 
       t.timestamps
     end

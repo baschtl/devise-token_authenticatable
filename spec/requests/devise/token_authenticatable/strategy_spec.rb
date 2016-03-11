@@ -56,7 +56,9 @@ describe Devise::Strategies::TokenAuthenticatable do
             expect(warden).to be_authenticated(:user)
           end
         end
+
       end
+
 
       context "when request is stateless" do
 
@@ -409,4 +411,42 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
     end
   end
+
+  context "with expired authentication token value" do
+
+    context "through params" do
+
+      before {
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(with_day_old_token: true)
+        end
+      }
+
+      it "should redirect to the sign in page" do
+        expect(response).to redirect_to new_user_session_path
+      end
+
+      it "should not authenticate user" do
+        expect(warden).to_not be_authenticated(:user)
+      end
+    end
+
+    context "through http header" do
+
+      before {
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(with_day_old_token: true)
+        end
+      }
+
+      it "should redirect to the sign in page" do
+        expect(response).to redirect_to new_user_session_path
+      end
+
+      it "does not authenticate with expired authentication token value in header" do
+        expect(warden).to_not be_authenticated(:user)
+      end
+    end
+  end
+
 end
