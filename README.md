@@ -63,7 +63,7 @@ Devise::TokenAuthenticatable.setup do |config|
   # defaults to false
   config.should_ensure_authentication_token = true
 end
-``
+```
 
 ## Documentation
 
