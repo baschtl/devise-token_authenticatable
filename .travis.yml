@@ -6,6 +6,9 @@ rvm:
   - 2.2.0
   - jruby-19mode
 
+before_install:
+  - gem install bundler -v 1.11
+
 env:
   global:
     - "JRUBY_OPTS=-Xcext.enabled=true"
