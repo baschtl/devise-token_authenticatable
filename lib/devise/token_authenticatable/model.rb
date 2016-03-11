@@ -29,6 +29,8 @@ module Devise
       included do
         before_save :reset_authentication_token_before_save
         before_save :ensure_authentication_token_before_save
+
+        attr_writer :expire_auth_token_on_timeout
       end
 
       module ClassMethods
@@ -82,8 +84,11 @@ module Devise
       end
 
       def expire_auth_token_on_timeout
-        # TODO: Add accessor to model
-        Devise::TokenAuthenticatable.expire_auth_token_on_timeout
+        if @expire_auth_token_on_timeout
+          @expire_auth_token_on_timeout
+        else
+          Devise::TokenAuthenticatable.expire_auth_token_on_timeout
+        end
       end
 
       private
