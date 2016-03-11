@@ -2,6 +2,12 @@
 # or not, based on last request time. If so and :expire_auth_token_on_timeout
 # is set to true, the record's auth token is reset.
 
+# This is a backport of the functionality of expire_auth_token_on_timeout that
+# has been removed from devise in version 3.5.2.
+#
+# For the original version cf.
+# https://github.com/plataformatec/devise/blob/v3.5.1/lib/devise/hooks/timeoutable.rb.
+
 Warden::Manager.after_set_user do |record, warden, options|
   scope = options[:scope]
   env   = warden.request.env
