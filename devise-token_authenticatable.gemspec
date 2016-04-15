@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Devise::TokenAuthenticatable::VERSION.dup
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Sebastian Oelke"]
-  spec.email         = ["dev@sohleeatsworld.de"]
+  spec.email         = ["dev@soelke.de"]
   spec.description   = %q{This gem provides the extracted Token Authenticatable module of devise.
                           It enables the user to sign in via an authentication token. This token
                           can be given via a query string or HTTP Basic Authentication.}
@@ -24,12 +24,12 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "devise",                         ">= 3.5.0", "<= 4.0.0"
 
-  spec.add_development_dependency "rails",              "~> 4.1.0"
-  spec.add_development_dependency "rspec-rails",        "~> 3.0.2"
-  spec.add_development_dependency "pry",                "~> 0.10.0"
-  spec.add_development_dependency "factory_girl_rails", "~> 4.4.0"
-  spec.add_development_dependency "timecop",            "~> 0.7.0"
-  spec.add_development_dependency "bundler",            "~> 1.6"
+  spec.add_development_dependency "rails",              "~> 4.1"
+  spec.add_development_dependency "rspec-rails",        "~> 3.0"
+  spec.add_development_dependency "pry",                "~> 0.10"
+  spec.add_development_dependency "factory_girl_rails", "~> 4.4"
+  spec.add_development_dependency "timecop",            "~> 0.7"
+  spec.add_development_dependency "bundler",            "~> 1.11"
 
   # Fix database connection with sqlite3 and jruby
   if    RUBY_ENGINE == 'ruby'

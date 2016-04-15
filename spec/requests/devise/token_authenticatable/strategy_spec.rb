@@ -137,8 +137,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on sign in" do
 
           it 'should authenticate the user' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
+              swap Devise, timeout_in: (-1).minute do
                 sign_in_as_new_user_with_token
                 expect(warden).to be_authenticated(:user)
               end
@@ -150,8 +150,8 @@ describe Devise::Strategies::TokenAuthenticatable do
         context "on re-sign in" do
 
           it 'should not authenticate the user' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
+              swap Devise, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
                 token = user.authentication_token
 
@@ -162,8 +162,8 @@ describe Devise::Strategies::TokenAuthenticatable do
           end
 
           it 'should reset the authentication token' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-              swap Devise, expire_auth_token_on_timeout: true, timeout_in: (-1).minute do
+            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
+              swap Devise, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
                 token = user.authentication_token
 

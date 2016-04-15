@@ -2,6 +2,20 @@ require 'spec_helper'
 
 describe Devise::TokenAuthenticatable do
 
+  context "configuring the expire_auth_token_on_timeout" do
+    let(:expire_auth_token_on_timeout) { true }
+
+    it "should set the configuration" do
+      expect {
+        Devise::TokenAuthenticatable.setup do |config|
+          config.expire_auth_token_on_timeout = expire_auth_token_on_timeout
+        end
+      }.to change {
+        Devise::TokenAuthenticatable.expire_auth_token_on_timeout
+      }.from(false).to(expire_auth_token_on_timeout)
+    end
+  end
+
   context "configuring the token_authentication_key" do
     let(:new_key) { :other_key }
 

@@ -1,3 +1,5 @@
+require 'devise/token_authenticatable/hooks/timeoutable'
+
 module Devise
   module Models
     # The +TokenAuthenticatable+ module is responsible for generating an authentication token and
@@ -27,6 +29,8 @@ module Devise
       included do
         before_save :reset_authentication_token_before_save
         before_save :ensure_authentication_token_before_save
+
+        attr_writer :expire_auth_token_on_timeout
       end
 
       module ClassMethods
@@ -47,8 +51,6 @@ module Devise
             break token unless to_adapter.find_first({ authentication_token: token })
           end
         end
-
-        Devise::Models.config(self, :expire_auth_token_on_timeout)
 
       end
 
@@ -82,7 +84,11 @@ module Devise
       end
 
       def expire_auth_token_on_timeout
-        self.class.expire_auth_token_on_timeout
+        if @expire_auth_token_on_timeout
+          @expire_auth_token_on_timeout
+        else
+          Devise::TokenAuthenticatable.expire_auth_token_on_timeout
+        end
       end
 
       private

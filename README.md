@@ -28,32 +28,42 @@ Or install it yourself as:
 `~> 0.2`                        | `~> 3.3.0`
 `~> 0.3`                        | `~> 3.4.0`
 `~> 0.4`                        | `~> 3.5.0`
+`~> 0.4.6`                      | `~> 3.5.2`
 
 ## Usage
 
 Add `:token_authenticatable` to your devise model:
 
-    class User < ActiveRecord::Base
-      devise :database_authenticatable, :token_authenticatable
-    end
+```ruby
+class User < ActiveRecord::Base
+  devise :database_authenticatable, :token_authenticatable
+end
+```
 
 ## Configuration
 
 This gem can be configured as shown in the following:
 
-    Devise::TokenAuthenticatable.setup do |config|
-      # set the authentication key name used by this module,
-      # defaults to :auth_token
-      config.token_authentication_key = :other_key_name
+```ruby
+Devise::TokenAuthenticatable.setup do |config|
+  # enables the expiration of a token after a session timeout,
+  # only useful in connection with the devise timeoutable module,
+  # defaults to false
+  config.expire_auth_token_on_timeout = true
 
-      # enable reset of the authentication token before the model is saved,
-      # defaults to false
-      config.should_reset_authentication_token = true
+  # set the authentication key name used by this module,
+  # defaults to :auth_token
+  config.token_authentication_key = :other_key_name
 
-      # enables the setting of the authentication token - if not already - before the model is saved,
-      # defaults to false
-      config.should_ensure_authentication_token = true
-    end
+  # enable reset of the authentication token before the model is saved,
+  # defaults to false
+  config.should_reset_authentication_token = true
+
+  # enables the setting of the authentication token - if not already - before the model is saved,
+  # defaults to false
+  config.should_ensure_authentication_token = true
+end
+```
 
 ## Documentation
 
