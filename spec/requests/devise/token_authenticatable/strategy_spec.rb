@@ -165,7 +165,7 @@ describe Devise::Strategies::TokenAuthenticatable do
             swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
               swap Devise, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
-                token = user.authentication_token
+                token = user.reload.authentication_token
 
                 sign_in_as_new_user_with_token(user: user)
                 user.reload
