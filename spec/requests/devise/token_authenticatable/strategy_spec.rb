@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe Devise::Strategies::TokenAuthenticatable do
-
   context "with valid authentication token key and value" do
-
     context "through params" do
-
       it "should be a success" do
         swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           sign_in_as_new_user_with_token
@@ -59,7 +56,6 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       context "when request is stateless" do
-
         it 'should authenticate the user with use of authentication token' do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, skip_session_storage: [:token_auth] do
@@ -92,13 +88,10 @@ describe Devise::Strategies::TokenAuthenticatable do
             end
           end
         end
-
       end
 
       context "when request is stateless and timeoutable" do
-
         context "on sign in" do
-
           it 'should authenticate the user' do
             swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
               swap Devise, skip_session_storage: [:token_auth], timeout_in: (0.1).second do
@@ -107,11 +100,9 @@ describe Devise::Strategies::TokenAuthenticatable do
               end
             end
           end
-
         end
 
         context "on delayed access" do
-
           it 'should authenticate the user' do
             swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
               swap Devise, skip_session_storage: [:token_auth], timeout_in: (0.1).second do
@@ -127,15 +118,11 @@ describe Devise::Strategies::TokenAuthenticatable do
               end
             end
           end
-
         end
-
       end
 
       context "when expire_auth_token_on_timeout is set to true, timeoutable is enabled and we have a timed out session" do
-
         context "on sign in" do
-
           it 'should authenticate the user' do
             swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
               swap Devise, timeout_in: (-1).minute do
@@ -144,16 +131,14 @@ describe Devise::Strategies::TokenAuthenticatable do
               end
             end
           end
-
         end
 
         context "on re-sign in" do
-
           it 'should not authenticate the user' do
             swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
               swap Devise, timeout_in: (-1).minute do
                 user  = sign_in_as_new_user_with_token
-                token = user.authentication_token
+                user.authentication_token
 
                 sign_in_as_new_user_with_token(user: user)
                 expect(warden).to_not be_authenticated(:user)
@@ -173,13 +158,10 @@ describe Devise::Strategies::TokenAuthenticatable do
               end
             end
           end
-
         end
-
       end
 
       context "when not configured" do
-
         it "should redirect to sign in page" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, params_authenticatable: [:database] do
@@ -203,7 +185,6 @@ describe Devise::Strategies::TokenAuthenticatable do
     end
 
     context "through http" do
-
       it "should be a success" do
         swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
@@ -225,7 +206,6 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       context "when not configured" do
-
         it "should be an unauthorized" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, http_authenticatable: [:database] do
@@ -249,7 +229,6 @@ describe Devise::Strategies::TokenAuthenticatable do
     end
 
     context "through http header" do
-
       it "should redirect to root path" do
         swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
           swap Devise, http_authenticatable: true do
@@ -325,7 +304,6 @@ describe Devise::Strategies::TokenAuthenticatable do
       end
 
       context "with denied token authorization" do
-
         it "should be an unauthorized" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
             swap Devise, http_authenticatable: false do
@@ -345,14 +323,11 @@ describe Devise::Strategies::TokenAuthenticatable do
             end
           end
         end
-
       end
-
     end
   end
 
   context "with improper authentication token key" do
-
     it "should redirect to the sign in page" do
       swap Devise::TokenAuthenticatable, token_authentication_key: :donald_duck_token do
         sign_in_as_new_user_with_token(auth_token_key: :secret_token)
@@ -372,19 +347,16 @@ describe Devise::Strategies::TokenAuthenticatable do
     it "should not be subject to injection" do
       swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
         user1 = create(:user, :with_authentication_token)
-        user2 = create(:user, :with_authentication_token)
+        create(:user, :with_authentication_token)
 
         get users_path(Devise::TokenAuthenticatable.token_authentication_key.to_s + '[$ne]' => user1.authentication_token)
         expect(warden).to_not be_authenticated(:user)
       end
     end
-
   end
 
   context "with improper authentication token value" do
-
     context "through params" do
-
       before { sign_in_as_new_user_with_token(auth_token: '*** INVALID TOKEN ***') }
 
       it "should redirect to the sign in page" do
@@ -397,7 +369,6 @@ describe Devise::Strategies::TokenAuthenticatable do
     end
 
     context "through http header" do
-
       before { sign_in_as_new_user_with_token(token_auth: true, auth_token: '*** INVALID TOKEN ***') }
 
       it "should be an unauthorized" do
@@ -406,6 +377,48 @@ describe Devise::Strategies::TokenAuthenticatable do
 
       it "does not authenticate with improper authentication token value in header" do
         expect(warden).to_not be_authenticated(:user)
+      end
+    end
+  end
+
+  context "with expired authentication token value" do
+    context "through params" do
+      it "should redirect to the sign in page" do
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+          sign_in_as_new_user_with_token(with_day_old_token: true)
+
+          expect(response).to redirect_to new_user_session_path
+        end
+      end
+
+      it "should not authenticate user" do
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+          sign_in_as_new_user_with_token(with_day_old_token: true)
+
+          expect(warden).to_not be_authenticated(:user)
+        end
+      end
+
+      context "through http header" do
+        it "should redirect to the sign in page" do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: true do
+              sign_in_as_new_user_with_token(http_auth: true, with_day_old_token: true)
+
+              expect(response.status).to eq(401)
+            end
+          end
+        end
+
+        it "does not authenticate with expired authentication token value in header" do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+            swap Devise, http_authenticatable: true do
+              sign_in_as_new_user_with_token(http_auth: true, with_day_old_token: true)
+
+              expect(warden).to_not be_authenticated(:user)
+            end
+          end
+        end
       end
     end
   end

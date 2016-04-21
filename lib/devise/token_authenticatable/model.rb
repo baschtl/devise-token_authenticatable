@@ -31,6 +31,7 @@ module Devise
         before_save :ensure_authentication_token_before_save
 
         attr_writer :expire_auth_token_on_timeout
+        attr_writer :token_expires_in
       end
 
       module ClassMethods
@@ -55,12 +56,13 @@ module Devise
       end
 
       def self.required_fields(klass)
-        [:authentication_token]
+        [:authentication_token, :authentication_token_created_at]
       end
 
       # Generate new authentication token (a.k.a. "single access token").
       def reset_authentication_token
         self.authentication_token = self.class.authentication_token
+        self.authentication_token_created_at = Time.now
       end
 
       # Generate new authentication token and save the record.
@@ -81,6 +83,10 @@ module Devise
 
       # Hook called after token authentication.
       def after_token_authentication
+      end
+
+      def token_expires_in
+        Devise::TokenAuthenticatable.token_expires_in
       end
 
       def expire_auth_token_on_timeout

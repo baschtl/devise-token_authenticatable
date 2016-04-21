@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Devise::TokenAuthenticatable do
-
   context "configuring the expire_auth_token_on_timeout" do
     let(:expire_auth_token_on_timeout) { true }
 
@@ -13,6 +12,18 @@ describe Devise::TokenAuthenticatable do
       }.to change {
         Devise::TokenAuthenticatable.expire_auth_token_on_timeout
       }.from(false).to(expire_auth_token_on_timeout)
+    end
+  end
+
+  context "configuring the token expiration" do
+    let(:expire_time) { 1.hour }
+
+    it "should set the configuration" do
+      expect {
+        Devise::TokenAuthenticatable.setup do |config|
+          config.token_expires_in = expire_time
+        end
+      }.to change { Devise::TokenAuthenticatable.token_expires_in }.from(nil).to(expire_time)
     end
   end
 
@@ -51,5 +62,4 @@ describe Devise::TokenAuthenticatable do
       }.to change { Devise::TokenAuthenticatable.should_ensure_authentication_token }.from(false).to(should_ensure)
     end
   end
-
 end
