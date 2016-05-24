@@ -95,7 +95,6 @@ module Devise
         @authentication_keys ||= [Devise::TokenAuthenticatable.token_authentication_key]
       end
 
-      # Overwrite authentication keys to use token_authentication_key.
       def token_expires_in
         @token_expires_in ||= Devise::TokenAuthenticatable.token_expires_in
       end

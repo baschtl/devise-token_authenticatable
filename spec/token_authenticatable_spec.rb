@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Devise::TokenAuthenticatable do
-  context "configuring the token expiration" do
+  context "configuring the token_expires_in" do
     let(:expire_time) { 1.hour }
 
     it "should set the configuration" do
