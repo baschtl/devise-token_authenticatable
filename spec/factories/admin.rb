@@ -10,7 +10,7 @@ FactoryGirl.define do
     end
 
     after(:create) do |u, evaluator|
-      u.confirm! if evaluator.confirm_account
+      u.confirm if evaluator.confirm_account
     end
 
     trait :with_reset_password_token do

@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   devise  :database_authenticatable, :confirmable, :lockable, :recoverable,
           :registerable, :rememberable, :timeoutable, :token_authenticatable,
-          :trackable, :validatable
+          :trackable, :validatable, reconfirmable: false
 
   attr_accessor :other_key
 
