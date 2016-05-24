@@ -12,36 +12,46 @@ shared_examples "token authenticatable" do
     describe "#reset_authentication_token" do
       let(:entity) { create(described_class.name.underscore.to_sym, :with_authentication_token) }
 
+      subject { entity.reset_authentication_token }
+
       it "should reset authentication token" do
-        expect { entity.reset_authentication_token }.to change { entity.authentication_token }
+        expect { subject }.to change { entity.authentication_token }
       end
 
       it "should reset token created at" do
-        expect { entity.reset_authentication_token }.to change { entity.authentication_token_created_at }
+        expect { subject }.to change { entity.authentication_token_created_at }
       end
     end
 
     describe "#ensure_authentication_token" do
+      subject { entity.ensure_authentication_token }
+
       context "with existing authentication token" do
         let(:entity) { create(described_class.name.underscore.to_sym, :with_authentication_token) }
 
         it "should not change the authentication token" do
-          expect { entity.ensure_authentication_token }.to_not change { entity.authentication_token }
+          expect { subject }.to_not change { entity.authentication_token }
+        end
+
+        it "should not change the authentication token created at" do
+          expect { subject }.to_not change { entity.authentication_token_created_at }
         end
       end
 
-      context "without existing authentication token" do
+      context "without existing authentication token and authentication token created at" do
         let(:entity) { create(described_class.name.underscore.to_sym) }
 
-        it "should create an authentication token" do
+        before :each do
           entity.authentication_token = nil
-          expect { entity.ensure_authentication_token }.to change { entity.authentication_token }
+          entity.authentication_token_created_at = nil
+        end
+
+        it "should set an authentication token" do
+          expect { subject }.to change { entity.authentication_token }
         end
 
         it "should set authentication token created at" do
-          entity.authentication_token = nil
-          entity.authentication_token_created_at = nil
-          expect { entity.ensure_authentication_token }.to change { entity.authentication_token_created_at }
+          expect { subject }.to change { entity.authentication_token_created_at }
         end
       end
     end

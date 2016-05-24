@@ -344,16 +344,16 @@ describe Devise::Strategies::TokenAuthenticatable do
   context "with expired authentication token value" do
     context "through params" do
       it "should redirect to the sign in page" do
-        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
-          sign_in_as_new_user_with_token(with_day_old_token: true)
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(use: :with_day_old_token)
 
           expect(response).to redirect_to new_user_session_path
         end
       end
 
       it "should not authenticate user" do
-        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
-          sign_in_as_new_user_with_token(with_day_old_token: true)
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(use: :with_day_old_token)
 
           expect(warden).to_not be_authenticated(:user)
         end
@@ -361,9 +361,9 @@ describe Devise::Strategies::TokenAuthenticatable do
 
       context "through http header" do
         it "should redirect to the sign in page" do
-          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
             swap Devise, http_authenticatable: true do
-              sign_in_as_new_user_with_token(http_auth: true, with_day_old_token: true)
+              sign_in_as_new_user_with_token(http_auth: true, use: :with_day_old_token)
 
               expect(response.status).to eq(401)
             end
@@ -371,9 +371,9 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
 
         it "does not authenticate with expired authentication token value in header" do
-          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour, token_authentication_key: :secret_token do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
             swap Devise, http_authenticatable: true do
-              sign_in_as_new_user_with_token(http_auth: true, with_day_old_token: true)
+              sign_in_as_new_user_with_token(http_auth: true, use: :with_day_old_token)
 
               expect(warden).to_not be_authenticated(:user)
             end
