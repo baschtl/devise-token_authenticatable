@@ -121,46 +121,6 @@ describe Devise::Strategies::TokenAuthenticatable do
         end
       end
 
-      context "when expire_auth_token_on_timeout is set to true, timeoutable is enabled and we have a timed out session" do
-        context "on sign in" do
-          it 'should authenticate the user' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
-              swap Devise, timeout_in: (-1).minute do
-                sign_in_as_new_user_with_token
-                expect(warden).to be_authenticated(:user)
-              end
-            end
-          end
-        end
-
-        context "on re-sign in" do
-          it 'should not authenticate the user' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
-              swap Devise, timeout_in: (-1).minute do
-                user  = sign_in_as_new_user_with_token
-                user.authentication_token
-
-                sign_in_as_new_user_with_token(user: user)
-                expect(warden).to_not be_authenticated(:user)
-              end
-            end
-          end
-
-          it 'should reset the authentication token' do
-            swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token, expire_auth_token_on_timeout: true do
-              swap Devise, timeout_in: (-1).minute do
-                user  = sign_in_as_new_user_with_token
-                token = user.authentication_token
-
-                sign_in_as_new_user_with_token(user: user)
-                user.reload
-                expect(token).to_not eq(user.authentication_token)
-              end
-            end
-          end
-        end
-      end
-
       context "when not configured" do
         it "should redirect to sign in page" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do

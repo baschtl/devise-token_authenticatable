@@ -45,34 +45,6 @@ shared_examples "token authenticatable" do
         end
       end
     end
-
-    describe "#expire_auth_token_on_timeout" do
-      let(:entity) { create(described_class.name.underscore.to_sym) }
-
-      context "enabling expire_auth_token_on_timeout first" do
-        before :each do
-          entity.expire_auth_token_on_timeout = true
-        end
-
-        it "should be true" do
-          expect(entity.expire_auth_token_on_timeout).to eq true
-        end
-
-        it "should not use the default" do
-          expect(Devise::TokenAuthenticatable).to_not receive(:expire_auth_token_on_timeout)
-
-          entity.expire_auth_token_on_timeout
-        end
-      end
-
-      context "not enabling expire_auth_token_on_timeout" do
-        it "should use the default" do
-          expect(Devise::TokenAuthenticatable).to receive(:expire_auth_token_on_timeout)
-
-          entity.expire_auth_token_on_timeout
-        end
-      end
-    end
   end
 
   context "class methods" do

@@ -3,13 +3,6 @@ require "devise/token_authenticatable/strategy"
 module Devise
   module TokenAuthenticatable
 
-    # Authentication token expiration on timeout
-    #
-    # This option is only used if your model uses the Devise
-    # :timeoutable module.
-    mattr_accessor :expire_auth_token_on_timeout
-    @@expire_auth_token_on_timeout = false
-
     # Authentication token params key name of choice. E.g. /users/sign_in?some_key=...
     mattr_accessor :token_authentication_key
     @@token_authentication_key = :auth_token
