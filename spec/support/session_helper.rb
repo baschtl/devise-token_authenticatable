@@ -7,7 +7,8 @@
 # a new one is created.
 #
 def sign_in_as_new_user_with_token(options = {})
-  user = options.delete(:user) || create(:user, :with_authentication_token)
+  trait = options[:use] ? options[:use] : :with_authentication_token
+  user = options.delete(:user) || create(:user, trait)
 
   options[:auth_token_key] ||= Devise::TokenAuthenticatable.token_authentication_key
   options[:auth_token]     ||= user.authentication_token

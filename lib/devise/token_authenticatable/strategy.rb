@@ -36,6 +36,12 @@ module Devise
         resource = mapping.to.find_for_token_authentication(authentication_hash)
         return fail(:invalid_token) unless resource
 
+        unless token_expires_in.blank?
+          if Time.now > (resource.authentication_token_created_at + token_expires_in.to_i)
+            return fail(:expired_token)
+          end
+        end
+
         if validate(resource)
           resource.after_token_authentication
           success!(resource)
@@ -87,6 +93,10 @@ module Devise
       # Overwrite authentication keys to use token_authentication_key.
       def authentication_keys
         @authentication_keys ||= [Devise::TokenAuthenticatable.token_authentication_key]
+      end
+
+      def token_expires_in
+        @token_expires_in ||= Devise::TokenAuthenticatable.token_expires_in
       end
     end
   end

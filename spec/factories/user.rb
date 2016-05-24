@@ -21,6 +21,12 @@ FactoryGirl.define do
 
     trait :with_authentication_token do
       authentication_token { SecureRandom.hex }
+      authentication_token_created_at { Time.now }
+    end
+
+    trait :with_day_old_token do
+      authentication_token { SecureRandom.hex }
+      authentication_token_created_at { Time.now - 1.day }
     end
   end
 end

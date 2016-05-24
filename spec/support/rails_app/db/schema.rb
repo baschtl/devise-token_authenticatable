@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20100401102949) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.string   "authentication_token"
+    t.datetime "authentication_token_created_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
