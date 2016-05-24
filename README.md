@@ -27,8 +27,8 @@ Or install it yourself as:
 `~> 0.1`                        | `~> 3.2.0`
 `~> 0.2`                        | `~> 3.3.0`
 `~> 0.3`                        | `~> 3.4.0`
-`~> 0.4`                        | `~> 3.5.0`
-`~> 0.4.6`                      | `~> 3.5.2`
+`~> 0.4`, `< 0.4.9`             | `~> 3.5.0`, `< 3.5.2`
+`~> 0.4.9`                      | `~> 3.5.2`
 
 ## Usage
 
@@ -46,10 +46,9 @@ This gem can be configured as shown in the following:
 
 ```ruby
 Devise::TokenAuthenticatable.setup do |config|
-  # enables the expiration of a token after a session timeout,
-  # only useful in connection with the devise timeoutable module,
-  # defaults to false
-  config.expire_auth_token_on_timeout = true
+  # enables the expiration of a token after a specified amount of time,
+  # defaults to nil
+  config.token_expires_in = 1.day
 
   # set the authentication key name used by this module,
   # defaults to :auth_token
