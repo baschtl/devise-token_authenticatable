@@ -65,6 +65,18 @@ Devise::TokenAuthenticatable.setup do |config|
 end
 ```
 
+## Troubleshooting
+
+##### Using a new user's auth token does not result in invalidating an old users session. How can I ignore session storage when using token authentication?
+
+Add `:token_auth` to your devise configuration:
+
+```ruby
+Devise.setup do |config|
+  config.skip_session_storage = [:http_auth, :token_auth]
+end
+```
+
 ## Documentation
 
 For your convenience there is also a [source code documentation](http://rubydoc.info/github/baschtl/devise-token_authenticatable/master/frames).
