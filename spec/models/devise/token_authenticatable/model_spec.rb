@@ -18,8 +18,16 @@ shared_examples "token authenticatable" do
         expect { subject }.to change { entity.authentication_token }
       end
 
-      it "should reset token created at" do
-        expect { subject }.to change { entity.authentication_token_created_at }
+      context "token created at" do
+        it "should reset" do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+            expect { subject }.to change { entity.authentication_token_created_at }
+          end
+        end
+
+        it "should not reset when token expires in not set" do
+          expect { subject }.to_not change { entity.authentication_token_created_at }
+        end
       end
     end
 
@@ -50,8 +58,16 @@ shared_examples "token authenticatable" do
           expect { subject }.to change { entity.authentication_token }
         end
 
-        it "should set authentication token created at" do
-          expect { subject }.to change { entity.authentication_token_created_at }
+        context "token created at" do
+          it "should set" do
+            swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+              expect { subject }.to change { entity.authentication_token_created_at }
+            end
+          end
+
+          it "should not set when token expires in disabled" do
+            expect { subject }.to_not change { entity.authentication_token_created_at }
+          end
         end
       end
     end
@@ -89,10 +105,18 @@ shared_examples "token authenticatable" do
     end
 
     describe "#required_fields" do
-      it "should contain the fields that Devise uses" do
+      it "should contain the fields that Devise uses when token expires in disabled" do
         expect(Devise::Models::TokenAuthenticatable.required_fields(described_class)).to eq([
-          :authentication_token, :authentication_token_created_at
+          :authentication_token
         ])
+      end
+
+      it "should contain the fields that Devise uses" do
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          expect(Devise::Models::TokenAuthenticatable.required_fields(described_class)).to eq([
+            :authentication_token, :authentication_token_created_at
+          ])
+        end
       end
     end
 
