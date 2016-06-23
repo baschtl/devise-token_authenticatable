@@ -53,13 +53,19 @@ module Devise
       end
 
       def self.required_fields(klass)
-        [:authentication_token, :authentication_token_created_at]
+        fields = [:authentication_token]
+
+        unless Devise::TokenAuthenticatable.token_expires_in.blank?
+          fields.push(:authentication_token_created_at)
+        end
+
+        fields
       end
 
       # Generate new authentication token (a.k.a. "single access token").
       def reset_authentication_token
         self.authentication_token = self.class.authentication_token
-        self.authentication_token_created_at = Time.now
+        self.authentication_token_created_at = Time.now unless token_expires_in.blank?
       end
 
       # Generate new authentication token and save the record.
