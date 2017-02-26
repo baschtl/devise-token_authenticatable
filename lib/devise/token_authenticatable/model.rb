@@ -35,21 +35,13 @@ module Devise
 
         def find_for_token_authentication(conditions)
           auth_conditions = conditions.dup
-          authentication_token = auth_conditions.delete(Devise::TokenAuthenticatable.token_authentication_key)
+          raw_token = auth_conditions.delete(Devise::TokenAuthenticatable.token_authentication_key)
+          enc_token = Devise.token_generator.digest(self, :authentication_token, raw_token)
 
           find_for_authentication(
-            auth_conditions.merge(authentication_token: authentication_token)
+            auth_conditions.merge(authentication_token: enc_token)
           )
         end
-
-        # Generate a token checking if one does not already exist in the database.
-        def authentication_token
-          loop do
-            token = Devise.friendly_token
-            break token unless to_adapter.find_first({ authentication_token: token })
-          end
-        end
-
       end
 
       def self.required_fields(klass)
@@ -64,8 +56,12 @@ module Devise
 
       # Generate new authentication token (a.k.a. "single access token").
       def reset_authentication_token
-        self.authentication_token = self.class.authentication_token
+        raw, enc = Devise.token_generator.generate(self.class, :authentication_token)
+
+        self.authentication_token = enc
         self.authentication_token_created_at = Time.now unless token_expires_in.blank?
+        save(validate: false)
+        raw
       end
 
       # Generate new authentication token and save the record.
@@ -94,13 +90,13 @@ module Devise
 
       private
 
-        def reset_authentication_token_before_save
-          reset_authentication_token if Devise::TokenAuthenticatable.should_reset_authentication_token
-        end
+      def reset_authentication_token_before_save
+        reset_authentication_token if Devise::TokenAuthenticatable.should_reset_authentication_token
+      end
 
-        def ensure_authentication_token_before_save
-          ensure_authentication_token if Devise::TokenAuthenticatable.should_ensure_authentication_token
-        end
+      def ensure_authentication_token_before_save
+        ensure_authentication_token if Devise::TokenAuthenticatable.should_ensure_authentication_token
+      end
     end
   end
 end
