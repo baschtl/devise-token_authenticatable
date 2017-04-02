@@ -57,7 +57,7 @@ module Devise
 
       # Check if the model accepts this strategy as token authenticatable.
       def token_authenticatable?
-        mapping.to.http_authenticatable?(:token_options)
+        mapping.to.http_authenticatable?(:token)
       end
 
       # Check if this is strategy is valid for token authentication by:
