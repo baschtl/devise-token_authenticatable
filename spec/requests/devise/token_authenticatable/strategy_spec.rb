@@ -224,7 +224,7 @@ describe Devise::Strategies::TokenAuthenticatable do
 
         it "should redirect to root path" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-            swap Devise, http_authenticatable: [:token_options] do
+            swap Devise, http_authenticatable: [:token] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(response).to be_success
@@ -234,7 +234,7 @@ describe Devise::Strategies::TokenAuthenticatable do
 
         it "should set the signature option" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-            swap Devise, http_authenticatable: [:token_options] do
+            swap Devise, http_authenticatable: [:token] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(request.env['devise.token_options'][:signature]).to eq(signature)
@@ -244,7 +244,7 @@ describe Devise::Strategies::TokenAuthenticatable do
 
         it "should set the nonce option" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-            swap Devise, http_authenticatable: [:token_options] do
+            swap Devise, http_authenticatable: [:token] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(request.env['devise.token_options'][:nonce]).to eq('def')
@@ -254,7 +254,7 @@ describe Devise::Strategies::TokenAuthenticatable do
 
         it "should authenticate user" do
           swap Devise::TokenAuthenticatable, token_authentication_key: :secret_token do
-            swap Devise, http_authenticatable: [:token_options] do
+            swap Devise, http_authenticatable: [:token] do
               sign_in_as_new_user_with_token(token_auth: true, token_options: { signature: signature, nonce: 'def' })
 
               expect(warden).to be_authenticated(:user)
