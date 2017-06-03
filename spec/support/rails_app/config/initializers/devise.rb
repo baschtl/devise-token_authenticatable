@@ -48,7 +48,12 @@ Devise.setup do |config|
   # Tell if authentication through request.params is enabled. True by default.
   # config.params_authenticatable = true
 
-  # Tell if authentication through HTTP Basic Auth is enabled. False by default.
+  # Tell if authentication through HTTP Auth is enabled. False by default.
+  # It can be set to an array that will enable http authentication only for the
+  # given strategies, for example, `config.http_authenticatable = [:database]` will
+  # enable it only for database authentication. The supported strategies are:
+  # :database = Support basic authentication with authentication key + password
+  # :token    = Support token authentication  
   config.http_authenticatable = true
 
   # If http headers should be returned for AJAX requests. True by default.

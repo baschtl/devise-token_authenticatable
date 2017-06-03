@@ -29,7 +29,7 @@ Or install it yourself as:
 `~> 0.3`                        | `~> 3.4.0`
 `~> 0.4.0`, `< 0.4.9`           | `~> 3.5.0`, `< 3.5.2`
 `~> 0.4.9`                      | `~> 3.5.2`
-`~> 0.5.x`                      | `>= 4.0.0`, `< 4.4.0`
+`~> 0.5.x`, `<= 1.0.0`          | `>= 4.0.0`, `< 4.4.0`
 
 ## Usage
 
@@ -63,6 +63,19 @@ Devise::TokenAuthenticatable.setup do |config|
   # enables the setting of the authentication token - if not already - before the model is saved,
   # defaults to false
   config.should_ensure_authentication_token = true
+end
+```
+
+Enable devise's HTTP Auth for the token strategy as shown below:
+
+```ruby
+# initializers/devise.rb
+Devise.setup do |config|
+  # ...
+  config.http_authenticatable = true
+  # or
+  config.http_authenticatable = [:token]
+  # ...
 end
 ```
 

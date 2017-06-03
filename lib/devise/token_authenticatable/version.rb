@@ -1,5 +1,5 @@
 module Devise
   module TokenAuthenticatable
-    VERSION = '0.5.3'.freeze
+    VERSION = '1.0.0'.freeze
   end
 end
