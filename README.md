@@ -32,6 +32,16 @@ Or install it yourself as:
 `~> 0.5.x`, `<= 1.0.0`          | `>= 4.0.0`, `< 4.4.0`
 
 ## Usage
+Create needed columns with corresponding migration:
+
+```ruby
+  def change
+    add_column :users, :authentication_token, :text
+    add_column :users, :authentication_token_created_at, :datetime
+
+    add_index :users, :authentication_token, unique: true
+  end
+```
 
 Add `:token_authenticatable` to your devise model:
 
