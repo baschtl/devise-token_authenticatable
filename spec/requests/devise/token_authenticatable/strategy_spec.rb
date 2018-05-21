@@ -341,6 +341,48 @@ describe Devise::Strategies::TokenAuthenticatable do
     end
   end
 
+  context "when token creation date is nil" do
+    context "through params" do
+      it "should redirect to the sign in page" do
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(use: :without_created_at)
+
+          expect(response).to redirect_to new_user_session_path
+        end
+      end
+
+      it "should not authenticate user" do
+        swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+          sign_in_as_new_user_with_token(use: :without_created_at)
+
+          expect(warden).to_not be_authenticated(:user)
+        end
+      end
+
+      context "through http header" do
+        it "should redirect to the sign in page" do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+            swap Devise, http_authenticatable: true do
+              sign_in_as_new_user_with_token(http_auth: true, use: :without_created_at)
+
+              expect(response.status).to eq(401)
+            end
+          end
+        end
+
+        it "does not authenticate with expired authentication token value in header" do
+          swap Devise::TokenAuthenticatable, token_expires_in: 1.hour do
+            swap Devise, http_authenticatable: true do
+              sign_in_as_new_user_with_token(http_auth: true, use: :without_created_at)
+
+              expect(warden).to_not be_authenticated(:user)
+            end
+          end
+        end
+      end
+    end
+  end
+
   context "with expired authentication token value" do
     context "through params" do
       it "should redirect to the sign in page" do
