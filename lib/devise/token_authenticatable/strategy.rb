@@ -37,6 +37,8 @@ module Devise
         return fail(:invalid_token) unless resource
 
         unless token_expires_in.blank?
+          return fail(:expired_token) if resource.authentication_token_created_at.nil?
+
           if Time.now > (resource.authentication_token_created_at + token_expires_in.to_i)
             return fail(:expired_token)
           end
