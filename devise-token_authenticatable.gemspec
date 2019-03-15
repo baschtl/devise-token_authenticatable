@@ -33,7 +33,8 @@ Gem::Specification.new do |spec|
 
   # Fix database connection with sqlite3 and jruby
   if    RUBY_ENGINE == 'ruby'
-    spec.add_development_dependency "sqlite3",          "~> 1.3"
+    # Match rails's expected version constraint
+    spec.add_development_dependency "sqlite3",          "~> 1.3.6"
   elsif RUBY_ENGINE == 'jruby'
     spec.add_development_dependency "activerecord-jdbcsqlite3-adapter"
   end
