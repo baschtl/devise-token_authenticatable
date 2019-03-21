@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry",                "~> 0.10"
   spec.add_development_dependency "factory_girl_rails", "~> 4.4"
   spec.add_development_dependency "timecop",            "~> 0.7"
-  spec.add_development_dependency "bundler",            "~> 1.15"
+  spec.add_development_dependency "bundler",            "~> 1.17"
 
   # Fix database connection with sqlite3 and jruby
   if    RUBY_ENGINE == 'ruby'

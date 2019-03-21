@@ -30,6 +30,7 @@ Or install it yourself as:
 `~> 0.4.0`, `< 0.4.9`           | `~> 3.5.0`, `< 3.5.2`
 `~> 0.4.9`                      | `~> 3.5.2`
 `~> 0.5.x`, `<= 1.0.2`          | `>= 4.0.0`, `< 4.6.0`
+`~> 1.1.0`                      | `>= 4.0.0`, `< 5.0.0`
 
 ## Usage
 Create needed columns with corresponding migration:
